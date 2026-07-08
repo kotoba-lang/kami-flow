@@ -350,6 +350,21 @@
       [:ok (pr-str v)]
       [:error v])))
 
+(defn- fixed
+  "`n` formatted to `digits` decimal places (portable stand-in for
+  `(format \"%.Nf\" n)`, which has no cljs equivalent)."
+  [n digits]
+  (let [scale (Math/pow 10 digits)
+        rounded (/ (Math/round (* n scale)) scale)
+        s (str rounded)
+        dot (str/index-of s ".")
+        s (if dot s (str s "."))
+        dot (or dot (dec (count s)))
+        have (- (count s) dot 1)]
+    (if (< have digits)
+      (str s (apply str (repeat (- digits have) "0")))
+      (subs s 0 (+ dot 1 digits)))))
+
 (defn render-signoff-html
   "Renders `report` (a signoff-report map) as a self-contained HTML signoff
   summary page, matching the original Rust `render_signoff_html`'s
@@ -368,21 +383,21 @@
      "<p><b>Policy:</b> " (:policy-version report) " (" (:policy-profile report) ")</p>"
      "<p><b>Top:</b> " (:top-module report) "</p>"
      "<p><b>RTL Ports:</b> " (:rtl-port-count report) "</p>"
-     "<p><b>PnR Utilization:</b> " (format "%.3f" (double (:floorplan-utilization report))) "</p>"
+     "<p><b>PnR Utilization:</b> " (fixed (double (:floorplan-utilization report)) 3) "</p>"
      "<p><b>GDSII Size:</b> " (:gdsii-size-bytes report) " bytes</p>"
      "<p><b>Equivalence:</b> " (:equivalence-status report)
      " (mismatch=" (:equivalence-mismatch-count report) ")</p>"
-     "<p><b>STA Setup Slack:</b> " (format "%.3f" (double (:sta-setup-slack-ps report))) " ps</p>"
-     "<p><b>STA Hold Slack:</b> " (format "%.3f" (double (:sta-hold-slack-ps report))) " ps</p>"
-     "<p><b>Dynamic Power:</b> " (format "%.3f" (double (:dynamic-power-mw report))) " mW</p>"
-     "<p><b>IR Max Drop:</b> " (format "%.3f" (double (:ir-max-drop-mv report))) " mV</p>"
+     "<p><b>STA Setup Slack:</b> " (fixed (double (:sta-setup-slack-ps report)) 3) " ps</p>"
+     "<p><b>STA Hold Slack:</b> " (fixed (double (:sta-hold-slack-ps report)) 3) " ps</p>"
+     "<p><b>Dynamic Power:</b> " (fixed (double (:dynamic-power-mw report)) 3) " mW</p>"
+     "<p><b>IR Max Drop:</b> " (fixed (double (:ir-max-drop-mv report)) 3) " mV</p>"
      "<p><b>DRC Violations:</b> " (:drc-violations report) " (deck=" (:drc-rule-deck report) ")</p>"
      "<p><b>LVS Mismatches:</b> " (:lvs-mismatches report) " (deck=" (:lvs-rule-deck report) ")</p>"
      "<p><b>DFT Scan Chains:</b> " (:dft-scan-chain-count report) "</p>"
-     "<p><b>ATPG Coverage:</b> " (format "%.2f" (* 100.0 (double (:dft-atpg-coverage report)))) "%</p>"
-     "<p><b>SI Z0:</b> " (format "%.3f" (double (:si-z0-ohm report))) " ohm</p>"
-     "<p><b>SI Eye Height:</b> " (format "%.3f" (double (:si-eye-height-mv report))) " mV</p>"
-     "<p><b>Yield:</b> " (format "%.2f" (* 100.0 (double (:yield-pass-ratio report)))) "%</p>"
+     "<p><b>ATPG Coverage:</b> " (fixed (* 100.0 (double (:dft-atpg-coverage report))) 2) "%</p>"
+     "<p><b>SI Z0:</b> " (fixed (double (:si-z0-ohm report)) 3) " ohm</p>"
+     "<p><b>SI Eye Height:</b> " (fixed (double (:si-eye-height-mv report)) 3) " mV</p>"
+     "<p><b>Yield:</b> " (fixed (* 100.0 (double (:yield-pass-ratio report))) 2) "%</p>"
      "<p><b>PVT Corners:</b> " (:pvt-corner-count report) "</p>"
      "<p><b>Artifacts:</b> " (:artifact-count report) "</p>"
      "<p><b>Overall:</b> <span style=\"color:" (if (:signoff-pass report) "#0a0" "#b00") "\">"
