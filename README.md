@@ -51,6 +51,27 @@ pipeline stage:
 STA and DRC/LVS are computed locally (as in the original Rust — there was
 never a dedicated `kami-sta`/`kami-drc` crate).
 
+## Compressible choked-flow contract (`flow.choked`)
+
+`src/flow/choked.cljc` removes the demonstrated block recorded by the
+open `flow.pressure` contract: its incompressible `restriction-mass-flow`
+is explicitly valid only for small pressure ratios and under-predicts
+choked flow. Cartridge / reactor / PEMFC hydrogen leak paths routinely
+sit at large pressure ratios, so this namespace supplies the compressible
+model:
+
+- `critical-pressure-ratio` — pr* = (2/(k+1))^(k/(k-1)) from a
+  caller-supplied gamma.
+- `choked?` — explicit regime determination for a pressure ratio.
+- `restriction-mass-flow` — 1-D isentropic ideal-gas orifice flow with
+  the regime in the result (`:choked` / `:subcritical`). The two branches
+  are continuous at pr = pr* (verified to machine epsilon in the tests).
+
+Units are SI and carried in the result keys. Gas identity (specific gas
+constant, gamma), pressures, temperature, area, and Cd are all explicit
+caller inputs — nothing is defaulted, and real-gas effects are not
+silently corrected.
+
 ## Notes on the port
 
 - `pnr.gdsii/export-gdsii` is JVM-only (`java.io.ByteArrayOutputStream`),
