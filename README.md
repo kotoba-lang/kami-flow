@@ -100,3 +100,20 @@ silently corrected.
 ```
 clojure -M:test
 ```
+## Fluid-pressure contract (`flow.pressure`)
+`src/flow/pressure.cljc` is an executable contract for the
+`:fluid-pressure-and-leak-cae` design domain of the magnesium-hydrogen-PEMFC
+electric-drive system (see `com-junkawasaki/root`
+`scripts/hermes-magnesium-systems-bots/system-scope.edn`):
+- `darcy-weisbach-delta-p` — incompressible segment pressure drop (Pa);
+  friction factor, density, velocity are all explicit caller inputs.
+- `colebrook-friction-factor` — fixed-point solve of the Colebrook–White
+  equation; the returned `:colebrook-residual` is the convergence evidence.
+- `reynolds-number` — Re from density/velocity/diameter/viscosity.
+- `restriction-mass-flow` — incompressible Bernoulli leak/restriction flow
+  (kg/s); valid only for small pressure ratios (not choked flow).
+- `series-pressure-drop` — composes labeled segments into a per-segment
+  breakdown plus a total circuit drop.
+Units are SI and carried in the result keys. No fluid properties, friction
+factors, or hydrogen performance constants are baked in — unknown
+measurements stay with the caller, who attaches provenance per component.
