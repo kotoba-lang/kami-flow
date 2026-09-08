@@ -42,7 +42,7 @@
   `pr-str` (EDN) for JSON serialization throughout — the hash and JSON
   fields are semantically equivalent (deterministic serialization of the
   same input) but not byte-identical to the Rust JSON output."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [rtl.hdl :as hdl]
             [pnr.floorplan :as floorplan]
             [pnr.gdsii :as gdsii]
@@ -163,7 +163,7 @@
   \"Inconclusive\"."
   [k]
   (let [s (name k)]
-    (str (str/upper-case (subs s 0 1)) (subs s 1))))
+    (str (str/upper (subs s 0 1)) (subs s 1))))
 
 ;; ---------------------------------------------------------------------------
 ;; Per-stage runners
