@@ -2,7 +2,7 @@
   "Tests for `flow` — ported 1:1 from the original Rust `kami-flow`
   `#[cfg(test)] mod tests` (kotoba-lang/kami-engine, deleted PR #82),
   plus a namespace-loads smoke test."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.lang.text] [clojure.test :refer [deftest is testing]]
             [flow :as flow]))
 
 (deftest namespace-loads-smoke-test
@@ -42,8 +42,8 @@
 (deftest signoff-html-contains-summary
   (let [[_tag report] (flow/run-minimal-flow (flow/flow-input))
         html (flow/render-signoff-html report)]
-    (is (clojure.string/includes? html "KAMI P10 Signoff Report"))
-    (is (clojure.string/includes? html "STA Setup Slack"))
-    (is (clojure.string/includes? html "DRC Violations"))
-    (is (clojure.string/includes? html "LVS Mismatches"))
-    (is (clojure.string/includes? html "Run ID"))))
+    (is (kotoba.lang.text/includes? html "KAMI P10 Signoff Report"))
+    (is (kotoba.lang.text/includes? html "STA Setup Slack"))
+    (is (kotoba.lang.text/includes? html "DRC Violations"))
+    (is (kotoba.lang.text/includes? html "LVS Mismatches"))
+    (is (kotoba.lang.text/includes? html "Run ID"))))
