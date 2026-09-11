@@ -53,7 +53,7 @@ never a dedicated `kami-sta`/`kami-drc` crate).
 
 ## Compressible choked-flow contract (`flow.choked`)
 
-`src/flow/choked.cljc` removes the demonstrated block recorded by the
+`src/flow/choked.cljk` removes the demonstrated block recorded by the
 open `flow.pressure` contract: its incompressible `restriction-mass-flow`
 is explicitly valid only for small pressure ratios and under-predicts
 choked flow. Cartridge / reactor / PEMFC hydrogen leak paths routinely
@@ -92,8 +92,8 @@ silently corrected.
 
 ## Size / tests
 
-- `src/flow.cljc`: 392 lines.
-- `test/flow_test.cljc`: 5 tests / 23 assertions (all 4 original Rust
+- `src/flow.cljk`: 392 lines.
+- `test/flow_test.cljk`: 5 tests / 23 assertions (all 4 original Rust
   `#[test]`s ported 1:1, plus a namespace-loads smoke test) — 0 failures,
   0 errors.
 
