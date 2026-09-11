@@ -98,7 +98,7 @@ silently corrected.
   0 errors.
 
 ```
-clojure -M:test
+kbb -M:test
 ```
 ## Fluid-pressure contract (`flow.pressure`)
 `src/flow/pressure.cljc` is an executable contract for the
