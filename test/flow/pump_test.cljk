@@ -3,7 +3,7 @@
   All numeric expectations are computed from the caller-supplied curve
   coefficients by hand in the test bodies; no constants are baked into
   the implementation under test."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [flow.pump :as pump]))
 
 (defn- approx=
