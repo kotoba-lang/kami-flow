@@ -6,7 +6,7 @@
   caller input: the hydrogen values used in a couple of tests are
   textbook ideal-gas values supplied BY the test as provenance, not
   defaults inside `flow.choked`."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [flow.choked :as choked]))
 
 (defn- approx=
